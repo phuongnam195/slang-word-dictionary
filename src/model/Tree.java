@@ -21,7 +21,7 @@ public class Tree<T, U> {
             if (child == null) {
                 Node<T, U> node = new Node<>();
                 node.setValue(branch);
-                curr.addChild(node);
+                child = curr.addChild(node);
             }
             curr = child;
         }
@@ -43,12 +43,12 @@ public class Tree<T, U> {
     public static class Node<T, U> {
         private T value;
         private Node<T, U> parent;
-        private List<Node<T, U>> children;
+        private ArrayList<Node<T, U>> children = new ArrayList<>();
         private U label;
 
         public Node() {}
 
-        public Node(T value, Node<T, U> parent, List<Node<T, U>> children) {
+        public Node(T value, Node<T, U> parent, ArrayList<Node<T, U>> children) {
             this.setValue(value);
             this.setParent(parent);
             this.setChildren(children);
@@ -69,19 +69,17 @@ public class Tree<T, U> {
             return null;
         }
 
-        public void addChild(Node<T, U> child) {
+        public Node<T, U> addChild(Node<T, U> child) {
             child.setParent(this);;
-            if (this.children == null) {
-                this.children = new ArrayList<>();
-            }
             this.children.add(child);
+            return child;
         }
 
         public List<Node<T, U>> getChildren() {
             return children;
         }
 
-        public void setChildren(List<Node<T, U>> children) {
+        public void setChildren(ArrayList<Node<T, U>> children) {
             this.children = children;
         }
 

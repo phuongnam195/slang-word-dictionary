@@ -19,7 +19,12 @@ public class SlangWord {
         SlangWord slangWord = new SlangWord();
         String[] tokens = line.split("`");
         slangWord.setWord(tokens[0].trim());
-        String[] defs = tokens[1].split("|");
+        String[] defs;
+        if (tokens[1].indexOf('|') != -1) {
+            defs = tokens[1].split("n");
+        } else {
+            defs = new String[] {tokens[1]};
+        }
         for (int i = 0; i < defs.length; i++) {
             slangWord.addDefinition(defs[i].trim());
         }
