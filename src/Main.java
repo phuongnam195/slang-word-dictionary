@@ -122,8 +122,11 @@ public class Main {
                     break;
                 }
                 case 7:
+                    SlangService.resetSlangWord();
+                    System.out.println("--> Khôi phục thành công!");
                     break;
                 case 8:
+                    System.out.println("--> On this day slang word: " + SlangService.getRandomWord());
                     break;
                 case 9:
                     break;

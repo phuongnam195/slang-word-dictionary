@@ -2,6 +2,7 @@ package model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Tree<T, U> implements Serializable {
     private Node<T, U> root;
@@ -58,6 +59,31 @@ public class Tree<T, U> implements Serializable {
         }
         curr.setLabel(null);
         return true;
+    }
+
+    public U getRandom() {
+        Random rng = new Random();
+        Node<T, U> curr = root;
+        while (true) {
+            ArrayList<Node<T, U>> children = curr.getChildren();
+            int index = rng.nextInt(children.size());
+            Node<T, U> child = children.get(index);
+            if (child.getLabel() != null) {
+                if (child.getChildren().isEmpty()) {
+                    return child.getLabel();
+                } else {
+                    boolean continueFind = rng.nextBoolean();
+                    if (continueFind) {
+                        curr = child;
+                    } else {
+                        return child.getLabel();
+                    }
+                }
+
+            } else {
+                curr = child;
+            }
+        }
     }
 
     public U find(ArrayList<T> branches) {

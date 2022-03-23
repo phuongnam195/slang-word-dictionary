@@ -39,14 +39,6 @@ public class Node<T, U> implements Serializable {
         return child;
     }
 
-    public boolean removeChild(T value) {
-        return this.children.removeIf(child -> child.getValue().equals(value));
-    }
-
-    public boolean isLeaf() {
-        return label != null;
-    }
-
     public ArrayList<Node<T, U>> getChildren() {
         return children;
     }
