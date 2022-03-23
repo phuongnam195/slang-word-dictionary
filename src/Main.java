@@ -1,61 +1,140 @@
 import java.util.Scanner;
-import java.util.HashSet;
+import java.util.ArrayList;
 
+import model.History;
 import model.SlangWord;
+import repository.HistoryRepository;
 import service.SlangService;
 
 public class Main {
     public static void main(String[] args) {
+        SlangService.start();
         Scanner sc = new Scanner(System.in);
-        System.out.println("   [1] Tìm kiếm theo slang word");
-        System.out.println("   [2] Tìm kiếm theo definition");
-        System.out.println("   [3] Hiển thị lịch sử tìm kiếm");
-        System.out.println("   [4] Thêm slang word mới");
-        System.out.println("   [5] Sửa slang word");
-        System.out.println("   [6] Xóa slang word");
-        System.out.println("   [7] Khôi phục danh sách gốc");
-        System.out.println("   [8] On this day slang word");
-        System.out.println("   [9] Đố vui: tìm definition cho slang word");
-        System.out.println("  [10] Đố vui: tìm slang word cho definition");
-        System.out.println("   [0] Thoát chương trình");
-        System.out.println();
-        System.out.print("> Nhập lựa chọn: ");
-        int choice = Integer.parseInt(sc.nextLine());
 
-        switch (choice) {
-            case 1:
-                System.out.print("> Nhập slang word cần tìm: ");
-                String word = sc.nextLine();
-                SlangWord result = SlangService.findByWord(word);
-                HashSet<String> definitions = result.getDefinitions();
-                System.out.print("  Kết quả tìm kiếm: ");
-                for (String def : definitions) {
-                    System.out.print(def + ", ");
+        while (true) {
+            System.out.println();
+            System.out.println("             MENU");
+            System.out.println("   [1] Tìm kiếm theo slang word");
+            System.out.println("   [2] Tìm kiếm theo definition");
+            System.out.println("   [3] Hiển thị lịch sử tìm kiếm");
+            System.out.println("   [4] Thêm slang word mới");
+            System.out.println("   [5] Sửa slang word");
+            System.out.println("   [6] Xóa slang word");
+            System.out.println("   [7] Khôi phục danh sách gốc");
+            System.out.println("   [8] On this day slang word");
+            System.out.println("   [9] Đố vui: tìm definition cho slang word");
+            System.out.println("  [10] Đố vui: tìm slang word cho definition");
+            System.out.println("   [0] Thoát chương trình");
+            System.out.println();
+            System.out.print("> Nhập lựa chọn: ");
+            int choice;
+            try {
+                choice = Integer.parseInt(sc.nextLine());
+            } catch (Exception e) {
+                continue;
+            }
+
+            switch (choice) {
+                case 1: {
+                    // Tìm kiếm theo slang word
+                    System.out.print("> Nhập slang word cần tìm: ");
+                    String word = sc.nextLine();
+                    SlangWord result = SlangService.findByWord(word);
+                    if (result == null) {
+                        System.out.println("--> Không tìm thấy slang word!");
+                    } else {
+                        ArrayList<String> definitions = result.getDefinitions();
+                        System.out.print("--> Kết quả tìm kiếm: ");
+                        for (int i = 0; i < definitions.size(); i++) {
+                            System.out.print(definitions.get(i));
+                            if (i < definitions.size() - 1) {
+                                System.out.print(", ");
+                            }
+                        }
+                        System.out.println();
+                    }
+                    break;
                 }
-                System.out.println();
-                break;
-            case 2:
-                break;
-            case 3:
-                break;
-            case 4:
-                break;
-            case 5:
-                break;
-            case 6:
-                break;
-            case 7:
-                break;
-            case 8:
-                break;
-            case 9:
-                break;
-            case 10:
-                break;
-            case 0:
-                break;
-                default: 
+
+                case 2:
+                    break;
+                case 3: {
+                    HistoryRepository hisRepo = HistoryRepository.getInstance();
+                    ArrayList<History<SlangWord>> history = hisRepo.loadAllHistory();
+                    for (History<SlangWord> log : history) {
+                        System.out.println(log.getData() + " | " + log.getTime());
+                    }
+                    break;
+                }
+                case 4: {
+                    // Thêm slang word mới
+                    System.out.println("  Thêm slang word mới");
+                    System.out.print("  + Nhập slang word: ");
+                    String word = sc.nextLine().trim();
+                    SlangWord newSW = new SlangWord(word);
+                    System.out.print("  + Nhập định nghĩa: ");
+                    String definition = sc.nextLine().trim();
+                    newSW.addDefinition(definition);
+                    while (true) {
+                        System.out.print("  + Nhập thêm định nghĩa (bỏ trống để dừng nhập): ");
+                        definition = sc.nextLine().trim();
+                        if (definition.isBlank()) {
+                            break;
+                        }
+                        newSW.addDefinition(definition);
+                    }
+                    SlangService.addSlangWord(newSW);
+                    break;
+                }
+
+                case 5: {
+                    // Sửa slang word
+                    System.out.print("> Nhập slang word cần sửa: ");
+                    String word = sc.nextLine().trim();
+                    SlangWord newSW = new SlangWord(word);
+                    System.out.print("  + Nhập định nghĩa mới: ");
+                    String definition = sc.nextLine().trim();
+                    newSW.addDefinition(definition);
+                    while (true) {
+                        System.out.print("  + Nhập thêm định nghĩa (bỏ trống để dừng nhập): ");
+                        definition = sc.nextLine().trim();
+                        if (definition.isBlank()) {
+                            break;
+                        }
+                        newSW.addDefinition(definition);
+                    }
+                    if (SlangService.updateSlangWord(newSW)) {
+                        System.out.println("--> Sửa thành công.");
+                    } else {
+                        System.out.println("--> Sửa thất bại!");
+                    }
+                    break;
+                }
+                case 6: {
+                    // Xóa slang word
+                    System.out.print("> Nhập slang word cần xóa: ");
+                    String word = sc.nextLine().trim();
+                    if (SlangService.removeSlangWord(word)) {
+                        System.out.println("--> Xóa thành công.");
+                    } else {
+                        System.out.println("--> Xóa thất bại!");
+                    }
+                    break;
+                }
+                case 7:
+                    break;
+                case 8:
+                    break;
+                case 9:
+                    break;
+                case 10:
+                    break;
+                case 0:
+                    SlangService.stop();
+                    sc.close();
+                    return;
+                default:
+            }
         }
-        sc.close();
     }
 }

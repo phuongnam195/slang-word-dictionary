@@ -47,18 +47,17 @@ public class Tree<T, U> implements Serializable {
 
     public boolean removeLeaf(ArrayList<T> branches) {
         Node<T, U> curr = root;
-        Node<T, U> next = new Node<T,U>();
         for (T branch : branches) {
-            next = curr.findChild(branch);
-            if (next == null) {
+            curr = curr.findChild(branch);
+            if (curr == null) {
                 return false;
             }
-            if (next.isLeaf()) {
-                break;
-            }
-            curr = next;
         }
-        return curr.removeChild(next.getValue());
+        if (curr.getLabel() == null) {
+            return false;
+        }
+        curr.setLabel(null);
+        return true;
     }
 
     public U find(ArrayList<T> branches) {

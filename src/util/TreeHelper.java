@@ -39,18 +39,5 @@ public class TreeHelper {
         } catch (IOException e) {
             System.out.println("TreeHelper -> saveTreeToFile(): " + e.toString());
         }
-        // try {
-        //     FileWriter writer = new FileWriter(fileName);
-        //     Node<Character, SlangWord> curr = treeSW.getRoot();
-        //     while (true) {
-        //         if (!curr.isLeaf()) {
-        //             for (Node<Character, SlangWord> child : curr.getChildren()) {
-
-        //             }
-        //         }
-        //     }            
-        // } catch (IOException e) {
-        //     System.out.println("TreeHelper -> saveTreeToFile(): " + e);
-        // }
     }
 }

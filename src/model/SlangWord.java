@@ -1,16 +1,22 @@
 package model;
 
-import java.util.HashSet;
+import java.io.Serializable;
+import java.util.ArrayList;
 
-public class SlangWord {
+public class SlangWord implements Serializable {
     private String word;
-    private HashSet<String> definitions;
+    private ArrayList<String> definitions;
 
     public SlangWord() {
-        definitions = new HashSet<String>();
+        definitions = new ArrayList<String>();
     }
 
-    public SlangWord(String word, HashSet<String> definitions) {
+    public SlangWord(String word) {
+        this.word = word;
+        definitions = new ArrayList<String>();
+    }
+
+    public SlangWord(String word, ArrayList<String> definitions) {
         this.word = word;
         this.definitions = definitions;
     }
@@ -19,12 +25,7 @@ public class SlangWord {
         SlangWord slangWord = new SlangWord();
         String[] tokens = line.split("`");
         slangWord.setWord(tokens[0].trim());
-        String[] defs;
-        if (tokens[1].indexOf('|') != -1) {
-            defs = tokens[1].split("n");
-        } else {
-            defs = new String[] {tokens[1]};
-        }
+        String[] defs = tokens[1].split("\\|");
         for (int i = 0; i < defs.length; i++) {
             slangWord.addDefinition(defs[i].trim());
         }
@@ -39,15 +40,20 @@ public class SlangWord {
         this.word = word;
     }
 
-    public HashSet<String> getDefinitions() {
+    public ArrayList<String> getDefinitions() {
         return this.definitions;
     }
 
-    public void setDefinitions(HashSet<String> definitions) {
+    public void setDefinitions(ArrayList<String> definitions) {
         this.definitions = definitions;
     }
 
     public void addDefinition(String newDefinition) {
         this.definitions.add(newDefinition);
+    }
+
+    @Override
+    public String toString() {
+        return "SlangWord{word=" + word + ", definitions=" + definitions + "}";
     }
 }
