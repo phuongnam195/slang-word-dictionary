@@ -25,14 +25,17 @@ public class SlangRepository {
     }
 
     private Tree<Character, SlangWord> _treeSW; // search: word, result: slang word
-    // private Tree<String, SlangWord> _treeSWdef; // search: definition, result:
-    // slang word
+    private Tree<String, SlangWord> _treeSWdef; // search: definition, result: slang word
+    private TreeHelper<Character> treeSWHelper;
+    private TreeHelper<String> treeSWdefHelper;
 
     private static final String TREE_FILE_NAME = "tree_slang_words.txt";
+    private static final String TREE_DEF_FILE_NAME = "tree_def_slang_words.txt";
     private static final String ORIGINAL_LIST_FILE_NAME = "original_slang_words.txt";
 
     public void save() {
-        TreeHelper.saveTreeToFile(_treeSW, TREE_FILE_NAME);
+        treeSWHelper.saveTreeToFile(_treeSW, TREE_FILE_NAME);
+        treeSWdefHelper.saveTreeToFile(_treeSWdef, TREE_DEF_FILE_NAME);
     }
 
     public ArrayList<SlangWord> getOriginalList() {
@@ -73,9 +76,11 @@ public class SlangRepository {
     public Tree<Character, SlangWord> getTree() {
         if (_treeSW == null) {
             try {
-                _treeSW = TreeHelper.loadTreeFromFile(TREE_FILE_NAME);
+                _treeSW = treeSWHelper.loadTreeFromFile(TREE_FILE_NAME);
+                _treeSWdef = treeSWdefHelper.loadTreeFromFile(TREE_DEF_FILE_NAME);
             } catch (Exception e) {
-                _treeSW = TreeHelper.buildSWTree(getOriginalList());
+                _treeSW = buildTreeSW(getOriginalList());
+                _treeSWdef = buildTreeSWdef(getOriginalList());
                 save();
             }
         }
@@ -83,6 +88,27 @@ public class SlangRepository {
     }
 
     public void reset() {
-        _treeSW = TreeHelper.buildSWTree(getOriginalList());
+        _treeSW = buildTreeSW(getOriginalList());
+        _treeSWdef = buildTreeSWdef(getOriginalList());
+    }
+
+    private Tree<Character, SlangWord> buildTreeSW(ArrayList<SlangWord> list) {
+        Tree<Character, SlangWord> treeSW = new Tree<Character, SlangWord>('.');
+        for (int i = 0; i < list.size(); i++) {
+            SlangWord slangWord = list.get(i);
+            String word = list.get(i).getWord();
+            treeSW.addLeaf(Utils.stringToCharList(word), slangWord);
+        }
+        return treeSW;
+    }
+
+    private Tree<String, SlangWord> buildTreeSWdef(ArrayList<SlangWord> list) {
+        Tree<String, SlangWord> treeSW = new Tree<String, SlangWord>("root");
+        for (int i = 0; i < list.size(); i++) {
+            SlangWord slangWord = list.get(i);
+            String word = list.get(i).getWord();
+            treeSW.addLeaf(Utils.stringToWordList(word), slangWord);
+        }
+        return treeSW;
     }
 }
