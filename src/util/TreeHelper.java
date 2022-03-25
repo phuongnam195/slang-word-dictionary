@@ -11,26 +11,16 @@ import java.util.ArrayList;
 import model.SlangWord;
 import model.Tree;
 
-public class TreeHelper {
-    public static Tree<Character, SlangWord> buildSWTree(ArrayList<SlangWord> listSW) {
-        Tree<Character, SlangWord> treeSW = new Tree<Character, SlangWord>(' ');
-        for (int i = 0; i < listSW.size(); i++) {
-            SlangWord slangWord = listSW.get(i);
-            String word = listSW.get(i).getWord();
-            treeSW.addLeaf(Utils.stringToCharList(word), slangWord);
-        }
-        return treeSW;
-    }
-
-    public static Tree<Character, SlangWord> loadTreeFromFile(String fileName) throws FileNotFoundException, IOException, ClassNotFoundException {
+public class TreeHelper<T> {
+    public Tree<T, SlangWord> loadTreeFromFile(String fileName) throws FileNotFoundException, IOException, ClassNotFoundException {
         ObjectInputStream ois;
         ois = new ObjectInputStream(new FileInputStream(fileName));
-        Tree<Character, SlangWord> tree = (Tree<Character, SlangWord>) ois.readObject();
+        Tree<T, SlangWord> tree = (Tree<T, SlangWord>) ois.readObject();
         ois.close();
         return tree;
     }
 
-    public static void saveTreeToFile(Tree<Character, SlangWord> treeSW, String fileName) {
+    public void saveTreeToFile(Tree<T, SlangWord> treeSW, String fileName) {
         ObjectOutputStream oos;
         try {
             oos = new ObjectOutputStream(new FileOutputStream(fileName));
