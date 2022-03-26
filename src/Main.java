@@ -1,7 +1,7 @@
 import java.util.Scanner;
 import java.util.ArrayList;
 
-import model.History;
+import model.SearchHistory;
 import model.SlangWord;
 import repository.HistoryRepository;
 import service.SlangService;
@@ -56,13 +56,30 @@ public class Main {
                     break;
                 }
 
-                case 2:
+                case 2: {
+                    // Tìm kiếm theo definition
+                    System.out.print("> Nhập definition cần tìm: ");
+                    String definition = sc.nextLine();
+                    ArrayList<SlangWord> result = SlangService.findByDefinition(definition);
+                    if (result == null) {
+                        System.out.println("--> Không tìm thấy slang word!");
+                    } else {
+                        System.out.print("--> Kết quả tìm kiếm: ");
+                        for (int i = 0; i < result.size(); i++) {
+                            System.out.print(result.get(i).getWord());
+                            if (i < result.size() - 1) {
+                                System.out.print(", ");
+                            }
+                        }
+                        System.out.println();
+                    }
                     break;
+                }
                 case 3: {
                     HistoryRepository hisRepo = HistoryRepository.getInstance();
-                    ArrayList<History<SlangWord>> history = hisRepo.loadAllHistory();
-                    for (History<SlangWord> log : history) {
-                        System.out.println(log.getData() + " | " + log.getTime());
+                    ArrayList<SearchHistory<SlangWord>> history = hisRepo.loadAllHistory();
+                    for (SearchHistory<SlangWord> log : history) {
+                        System.out.println(log.getTime() + " | \"" + log.getKeyword() + "\" --> " + log.getResult());
                     }
                     break;
                 }

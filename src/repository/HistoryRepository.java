@@ -7,11 +7,10 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 
 import extension.AppendableObjectOutputStream;
-import model.History;
+import model.SearchHistory;
 import model.SlangWord;
 
 public class HistoryRepository {
@@ -27,17 +26,17 @@ public class HistoryRepository {
     private HistoryRepository() {
     }
 
-    private static final String HISTORY_FILE_NAME = "history.txt";
+    private static final String HISTORY_FILE_NAME = "history.dat";
 
-    public ArrayList<History<SlangWord>> loadAllHistory() {
-        ArrayList<History<SlangWord>> result = new ArrayList<>();
+    public ArrayList<SearchHistory<SlangWord>> loadAllHistory() {
+        ArrayList<SearchHistory<SlangWord>> result = new ArrayList<>();
         ObjectInputStream ois;
         try {
             InputStream is = new FileInputStream(HISTORY_FILE_NAME);
             ois = new ObjectInputStream(is);
             while (true) {
                 try {
-                    History<SlangWord> his = (History<SlangWord>) ois.readObject();
+                    SearchHistory<SlangWord> his = (SearchHistory<SlangWord>) ois.readObject();
                     result.add(his);
                 } catch (EOFException e) {
                     break;
@@ -48,8 +47,8 @@ public class HistoryRepository {
         return result;
     }
 
-    public boolean addLog(SlangWord slangWord) {
-        History<SlangWord> log = new History<SlangWord>(slangWord, System.currentTimeMillis());
+    public boolean addLog(String keyword, ArrayList<SlangWord> result) {
+        SearchHistory<SlangWord> log = new SearchHistory<SlangWord>(keyword, result, System.currentTimeMillis());
         try {
             File file = new File(HISTORY_FILE_NAME);
             ObjectOutputStream oOut;
