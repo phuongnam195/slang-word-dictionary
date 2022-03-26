@@ -21,21 +21,23 @@ public class SlangRepository {
     }
 
     private SlangRepository() {
+        _treeSWHelper = new TreeHelper<Character>();
+        _treeSWdefHelper = new TreeHelper<String>();
         getTree();
     }
 
     private Tree<Character, SlangWord> _treeSW; // search: word, result: slang word
     private Tree<String, SlangWord> _treeSWdef; // search: definition, result: slang word
-    private TreeHelper<Character> treeSWHelper;
-    private TreeHelper<String> treeSWdefHelper;
+    private TreeHelper<Character> _treeSWHelper;
+    private TreeHelper<String> _treeSWdefHelper;
 
     private static final String TREE_FILE_NAME = "tree_slang_words.txt";
     private static final String TREE_DEF_FILE_NAME = "tree_def_slang_words.txt";
     private static final String ORIGINAL_LIST_FILE_NAME = "original_slang_words.txt";
 
     public void save() {
-        treeSWHelper.saveTreeToFile(_treeSW, TREE_FILE_NAME);
-        treeSWdefHelper.saveTreeToFile(_treeSWdef, TREE_DEF_FILE_NAME);
+        _treeSWHelper.saveTreeToFile(_treeSW, TREE_FILE_NAME);
+        _treeSWdefHelper.saveTreeToFile(_treeSWdef, TREE_DEF_FILE_NAME);
     }
 
     public ArrayList<SlangWord> getOriginalList() {
@@ -74,13 +76,14 @@ public class SlangRepository {
     }
 
     public Tree<Character, SlangWord> getTree() {
-        if (_treeSW == null) {
+        if (_treeSW == null || _treeSWdef == null) {
             try {
-                _treeSW = treeSWHelper.loadTreeFromFile(TREE_FILE_NAME);
-                _treeSWdef = treeSWdefHelper.loadTreeFromFile(TREE_DEF_FILE_NAME);
+                _treeSW = _treeSWHelper.loadTreeFromFile(TREE_FILE_NAME);
+                _treeSWdef = _treeSWdefHelper.loadTreeFromFile(TREE_DEF_FILE_NAME);
             } catch (Exception e) {
-                _treeSW = buildTreeSW(getOriginalList());
-                _treeSWdef = buildTreeSWdef(getOriginalList());
+                ArrayList<SlangWord> list = getOriginalList();
+                _treeSW = buildTreeSW(list);
+                _treeSWdef = buildTreeSWdef(list);
                 save();
             }
         }
