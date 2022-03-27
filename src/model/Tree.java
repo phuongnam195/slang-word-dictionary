@@ -86,7 +86,7 @@ public class Tree<T, U> implements Serializable {
         }
     }
 
-    public U find(ArrayList<T> branches) {
+    public U findLeaf(ArrayList<T> branches) {
         Node<T, U> curr = root;
         for (T branch : branches) {
             curr = curr.findChild(branch);
@@ -95,5 +95,20 @@ public class Tree<T, U> implements Serializable {
             }
         }
         return curr.getLabel();
+    }
+
+    public ArrayList<U> filter(ArrayList<T> branches) {
+        ArrayList<U> result = new ArrayList<>();
+        Node<T, U> curr = root;
+        for (T branch : branches) {
+            curr = curr.findChild(branch);
+            if (curr == null) {
+                return new ArrayList<>();
+            }
+        }
+        for (Node<T, U> child : curr.getChildren()) {
+            result.add(child.getLabel());
+        }
+        return result;
     }
 }

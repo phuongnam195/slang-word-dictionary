@@ -1,5 +1,7 @@
 package service;
 
+import java.util.ArrayList;
+
 import model.SlangWord;
 import repository.HistoryRepository;
 import repository.SlangRepository;
@@ -17,9 +19,18 @@ public class SlangService {
     }
 
     public static SlangWord findByWord(String word) {
-        SlangWord result = repository.getTree().find(Utils.stringToCharList(word));
+        ArrayList<SlangWord> result = new ArrayList<>();
+        result.add(repository.getTree().findLeaf(Utils.stringToCharList(word)));
         if (result != null) {
-            HistoryRepository.getInstance().addLog(result);
+            HistoryRepository.getInstance().addLog(word, result);
+        }
+        return result.get(0);
+    }
+
+    public static ArrayList<SlangWord> findByDefinition(String words) {
+        ArrayList<SlangWord> result = repository.getTreeDef().filter(Utils.stringToWordList(words));
+        if (result != null) {
+            HistoryRepository.getInstance().addLog(words, result);
         }
         return result;
     }

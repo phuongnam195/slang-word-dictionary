@@ -23,7 +23,7 @@ public class SlangRepository {
     private SlangRepository() {
         _treeSWHelper = new TreeHelper<Character>();
         _treeSWdefHelper = new TreeHelper<String>();
-        getTree();
+        loadTree();
     }
 
     private Tree<Character, SlangWord> _treeSW; // search: word, result: slang word
@@ -31,8 +31,8 @@ public class SlangRepository {
     private TreeHelper<Character> _treeSWHelper;
     private TreeHelper<String> _treeSWdefHelper;
 
-    private static final String TREE_FILE_NAME = "tree_slang_words.txt";
-    private static final String TREE_DEF_FILE_NAME = "tree_def_slang_words.txt";
+    private static final String TREE_FILE_NAME = "tree_slang_words.dat";
+    private static final String TREE_DEF_FILE_NAME = "tree_def_slang_words.dat";
     private static final String ORIGINAL_LIST_FILE_NAME = "original_slang_words.txt";
 
     public void save() {
@@ -53,7 +53,7 @@ public class SlangRepository {
             }
             sc.close();
         } catch (FileNotFoundException e) {
-            System.out.println("AppRepository -> getList(): " + e);
+            System.out.println("AppRepository -> getOriginalList(): " + e);
         }
         return originalList;
     }
@@ -76,6 +76,14 @@ public class SlangRepository {
     }
 
     public Tree<Character, SlangWord> getTree() {
+        return _treeSW;
+    }
+
+    public Tree<String, SlangWord> getTreeDef() {
+        return _treeSWdef;
+    }
+
+    public void loadTree() {
         if (_treeSW == null || _treeSWdef == null) {
             try {
                 _treeSW = _treeSWHelper.loadTreeFromFile(TREE_FILE_NAME);
@@ -87,7 +95,6 @@ public class SlangRepository {
                 save();
             }
         }
-        return _treeSW;
     }
 
     public void reset() {
