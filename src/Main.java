@@ -61,7 +61,7 @@ public class Main {
                     System.out.print("> Nhập definition cần tìm: ");
                     String definition = sc.nextLine();
                     ArrayList<SlangWord> result = SlangService.findByDefinition(definition);
-                    if (result == null) {
+                    if (result == null || result.isEmpty()) {
                         System.out.println("--> Không tìm thấy slang word!");
                     } else {
                         System.out.print("--> Kết quả tìm kiếm: ");
@@ -77,7 +77,7 @@ public class Main {
                 }
                 case 3: {
                     HistoryRepository hisRepo = HistoryRepository.getInstance();
-                    ArrayList<SearchHistory<SlangWord>> history = hisRepo.loadAllHistory();
+                    ArrayList<SearchHistory<SlangWord>> history = hisRepo.get();
                     for (SearchHistory<SlangWord> log : history) {
                         System.out.println(log.getTime() + " | \"" + log.getKeyword() + "\" --> " + log.getResult());
                     }

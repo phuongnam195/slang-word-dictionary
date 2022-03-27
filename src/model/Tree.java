@@ -3,6 +3,7 @@ package model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Stack;
 
 public class Tree<T, U> implements Serializable {
     private Node<T, U> root;
@@ -98,7 +99,6 @@ public class Tree<T, U> implements Serializable {
     }
 
     public ArrayList<U> filter(ArrayList<T> branches) {
-        ArrayList<U> result = new ArrayList<>();
         Node<T, U> curr = root;
         for (T branch : branches) {
             curr = curr.findChild(branch);
@@ -106,8 +106,17 @@ public class Tree<T, U> implements Serializable {
                 return new ArrayList<>();
             }
         }
-        for (Node<T, U> child : curr.getChildren()) {
-            result.add(child.getLabel());
+        ArrayList<U> result = new ArrayList<>();
+        Stack<Node<T, U>> stack = new Stack<>();
+        stack.addAll(curr.getChildren());
+        while (!stack.empty()) {
+            Node<T, U> p = stack.pop();
+            if (p.getLabel() != null) {
+                result.add(p.getLabel());
+            }
+            if (p.getChildren() != null) {
+                stack.addAll(p.getChildren());
+            }
         }
         return result;
     }

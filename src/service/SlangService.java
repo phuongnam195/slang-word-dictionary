@@ -12,25 +12,27 @@ public class SlangService {
 
     public static void start() {
         repository = SlangRepository.getInstance();
+        HistoryRepository.getInstance().load();
     }
 
     public static void stop() {
         repository.save();
+        HistoryRepository.getInstance().save();
     }
 
     public static SlangWord findByWord(String word) {
         ArrayList<SlangWord> result = new ArrayList<>();
         result.add(repository.getTree().findLeaf(Utils.stringToCharList(word)));
-        if (result != null) {
-            HistoryRepository.getInstance().addLog(word, result);
+        if (result != null && !result.isEmpty()) {
+            HistoryRepository.getInstance().add(word, result);
         }
         return result.get(0);
     }
 
     public static ArrayList<SlangWord> findByDefinition(String words) {
         ArrayList<SlangWord> result = repository.getTreeDef().filter(Utils.stringToWordList(words));
-        if (result != null) {
-            HistoryRepository.getInstance().addLog(words, result);
+        if (result != null && !result.isEmpty()) {
+            HistoryRepository.getInstance().add(words, result);
         }
         return result;
     }

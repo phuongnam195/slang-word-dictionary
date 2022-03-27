@@ -1,7 +1,6 @@
 package repository;
 
 import java.io.EOFException;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -9,7 +8,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
-import extension.AppendableObjectOutputStream;
 import model.SearchHistory;
 import model.SlangWord;
 
@@ -23,13 +21,18 @@ public class HistoryRepository {
         return instance;
     }
 
-    private HistoryRepository() {
-    }
+    private HistoryRepository() { }
+
+    private ArrayList<SearchHistory<SlangWord>> _history;
 
     private static final String HISTORY_FILE_NAME = "history.dat";
 
-    public ArrayList<SearchHistory<SlangWord>> loadAllHistory() {
-        ArrayList<SearchHistory<SlangWord>> result = new ArrayList<>();
+    public ArrayList<SearchHistory<SlangWord>> get() {
+        return _history;
+    }
+
+    public void load() {
+        _history = new ArrayList<>();
         ObjectInputStream ois;
         try {
             InputStream is = new FileInputStream(HISTORY_FILE_NAME);
@@ -37,31 +40,31 @@ public class HistoryRepository {
             while (true) {
                 try {
                     SearchHistory<SlangWord> his = (SearchHistory<SlangWord>) ois.readObject();
-                    result.add(his);
+                    _history.add(his);
                 } catch (EOFException e) {
                     break;
                 }
             }
         ois.close();
-        } catch (Exception e) {}
-        return result;
+        } catch (Exception e) {
+        }
     }
 
-    public boolean addLog(String keyword, ArrayList<SlangWord> result) {
-        SearchHistory<SlangWord> log = new SearchHistory<SlangWord>(keyword, result, System.currentTimeMillis());
+    public void save() {
+        ObjectOutputStream oos;
         try {
-            File file = new File(HISTORY_FILE_NAME);
-            ObjectOutputStream oOut;
-            if (file.exists()) {
-                oOut = new AppendableObjectOutputStream(new FileOutputStream(file));
-            } else {
-                oOut = new ObjectOutputStream(new FileOutputStream(file));
+            oos = new ObjectOutputStream(new FileOutputStream(HISTORY_FILE_NAME));
+            for (SearchHistory<SlangWord> log : _history) {
+                oos.writeObject(log);
             }
-            oOut.writeObject(log);
-            oOut.close();
+            oos.close();
         } catch (Exception e) {
-            return false;
+            System.out.println("TreeHelper -> saveTreeToFile(): " + e.toString());
         }
-        return true;
+    }
+
+    public void add(String keyword, ArrayList<SlangWord> result) {
+        SearchHistory<SlangWord> log = new SearchHistory<SlangWord>(keyword, result, System.currentTimeMillis());
+        _history.add(log);
     }
 }

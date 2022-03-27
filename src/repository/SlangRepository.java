@@ -116,8 +116,11 @@ public class SlangRepository {
         Tree<String, SlangWord> treeSW = new Tree<String, SlangWord>("root");
         for (int i = 0; i < list.size(); i++) {
             SlangWord slangWord = list.get(i);
-            String word = list.get(i).getWord();
-            treeSW.addLeaf(Utils.stringToWordList(word), slangWord);
+            ArrayList<String> defs = list.get(i).getDefinitions();
+            for (int j = 0; j < defs.size(); j++) {
+                String def = defs.get(j);
+                treeSW.addLeaf(Utils.stringToWordList(def), slangWord);
+            }
         }
         return treeSW;
     }
