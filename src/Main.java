@@ -1,5 +1,6 @@
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.util.Random;
 
 import model.SearchHistory;
 import model.SlangWord;
@@ -138,17 +139,70 @@ public class Main {
                     }
                     break;
                 }
-                case 7:
+                case 7: {
+                    // Khôi phục danh sách gốc
                     SlangService.resetSlangWord();
                     System.out.println("--> Khôi phục thành công!");
                     break;
-                case 8:
+                }
+                case 8: {
                     System.out.println("--> On this day slang word: " + SlangService.getRandomWord());
                     break;
-                case 9:
+                }
+                case 9: {
+                    SlangWord answer = SlangService.getRandomWord();
+                    ArrayList<SlangWord> options = new ArrayList<>();
+                    while (options.size() < 3) {
+                        SlangWord option = SlangService.getRandomWord();
+                        if (option != answer && !options.contains(option)) {
+                            options.add(option);
+                        }
+                    }
+                    Random rng = new Random();
+                    int answerPos = rng.nextInt(4);
+                    options.add(answerPos, answer);
+                    System.out.println("  Tìm definition cho " + answer.getWord() + ":");
+                    System.out.println("    - A. " + options.get(0).getDefinitions());
+                    System.out.println("    - B. " + options.get(1).getDefinitions());
+                    System.out.println("    - C. " + options.get(2).getDefinitions());
+                    System.out.println("    - D. " + options.get(3).getDefinitions());
+                    System.out.print("> Nhập lựa chọn của bạn: ");
+                    String choice2 = sc.nextLine();
+                    if ((choice2 == "A" && answerPos == 0) || (choice2 == "B" && answerPos == 1) ||
+                            (choice2 == "C" && answerPos == 2) || (choice2 == "D" && answerPos == 3)) {
+                        System.out.println("--> Chính xác!");
+                    } else {
+                        System.out.println("--> Sai. Câu trả lời đúng là: " + answer.getDefinitions());
+                    }
                     break;
-                case 10:
+                }
+                case 10: {
+                    SlangWord answer = SlangService.getRandomWord();
+                    ArrayList<SlangWord> options = new ArrayList<>();
+                    while (options.size() < 3) {
+                        SlangWord option = SlangService.getRandomWord();
+                        if (option != answer && !options.contains(option)) {
+                            options.add(option);
+                        }
+                    }
+                    Random rng = new Random();
+                    int answerPos = rng.nextInt(4);
+                    options.add(answerPos, answer);
+                    System.out.println("  Tìm definition cho " + answer.getDefinitions() + ":");
+                    System.out.println("    - A. " + options.get(0).getWord());
+                    System.out.println("    - B. " + options.get(1).getWord());
+                    System.out.println("    - C. " + options.get(2).getWord());
+                    System.out.println("    - D. " + options.get(3).getWord());
+                    System.out.print("> Nhập lựa chọn của bạn: ");
+                    String choice2 = sc.nextLine();
+                    if ((choice2.equals("A") && answerPos == 0) || (choice2.equals("B") && answerPos == 1) ||
+                            (choice2.equals("C") && answerPos == 2) || (choice2.equals("D") && answerPos == 3)) {
+                        System.out.println("--> Chính xác!");
+                    } else {
+                        System.out.println("--> Sai. Câu trả lời đúng là: " + answer.getWord());
+                    }
                     break;
+                }
                 case 0:
                     SlangService.stop();
                     sc.close();
