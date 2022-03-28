@@ -119,7 +119,11 @@ public class SlangRepository {
             ArrayList<String> defs = list.get(i).getDefinitions();
             for (int j = 0; j < defs.size(); j++) {
                 String def = defs.get(j);
-                treeSW.addLeaf(Utils.stringToWordList(def), slangWord);
+                ArrayList<String> words = Utils.stringToWordList(def);
+                while (words.size() > 0) {
+                    treeSW.addLeaf(words, slangWord);
+                    words.remove(0);
+                }
             }
         }
         return treeSW;

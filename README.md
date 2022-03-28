@@ -1,18 +1,18 @@
-## Getting Started
+# Slang Word
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+### Họ tên: Đặng Phương Nam (19120591)
+### Môi trường: Visual Studio Code, JDK 17
 
-## Folder Structure
+# Hướng dẫn sử dụng
 
-The workspace contains two folders by default, where:
+## 1. Cách chạy file JAR
 
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
+* Bước 1: Trên command line, chuyển tới thư mục slang_word_dictionary
+* Bước 2: Chạy lệnh `java --enable-preview -jar slang_word_dictionary.jar`
 
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
-
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
-
-## Dependency Management
-
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+## 2. Hiển thị tiếng Việt trên VSCode's terminal
+* Bước 1: Windows + R, intl.cpl, Enter
+* Bước 2: Administrative tab
+* Bước 3: Change system locale...
+* Bước 4: Check `Beta: Use Unicode UTF-8...`
+* Bước 5: Restart PC

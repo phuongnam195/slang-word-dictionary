@@ -168,8 +168,8 @@ public class Main {
                     System.out.println("    - D. " + options.get(3).getDefinitions());
                     System.out.print("> Nhập lựa chọn của bạn: ");
                     String choice2 = sc.nextLine();
-                    if ((choice2 == "A" && answerPos == 0) || (choice2 == "B" && answerPos == 1) ||
-                            (choice2 == "C" && answerPos == 2) || (choice2 == "D" && answerPos == 3)) {
+                    if ((choice2.equals("A") && answerPos == 0) || (choice2.equals("B") && answerPos == 1) ||
+                            (choice2.equals("C") && answerPos == 2) || (choice2.equals("D") && answerPos == 3)) {
                         System.out.println("--> Chính xác!");
                     } else {
                         System.out.println("--> Sai. Câu trả lời đúng là: " + answer.getDefinitions());
